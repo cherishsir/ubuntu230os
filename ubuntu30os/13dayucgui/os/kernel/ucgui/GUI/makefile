@@ -1,0 +1,27 @@
+TOPDIR=$(shell pwd)
+SUBDIRS=AntiAlias ConvertMono Font LCDDriver MultiLayer WM ConvertColor Core JPEG MemDev Widget
+
+
+all:
+	@for dir in $(SUBDIRS); \
+	do cd $$dir;make;cd ..; \
+	done
+
+lib:
+	@for dir in $(SUBDIRS); \
+	do cd $$dir;make lib;cd ..; \
+	done
+	@mv *.o ../
+
+
+clean:
+	@for dir in $(SUBDIRS); \
+	do cd $$dir; \
+	rm -f *.bat *.bat *.scc *.o;cd ../; \
+	done
+	@echo "remove done"
+
+	
+	
+
+#	do cd $$dir;rm *.bak *.bat *.scc;cd ..; \
