@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="../../os/makefile" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="845" topLine="17" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/include/mm.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="828" topLine="28" />
+		</Cursor>
+	</File>
+	<File name="../../os/bootloaderusb.asm" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="8" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2195" topLine="121" />
+		</Cursor>
+	</File>
+	<File name="../../os/bootloader.asm" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="8" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1052" topLine="40" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/include/header.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="381" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/include/types.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/include/fontascii.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="87" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/mm.c" open="1" top="0" tabpos="6" split="2" active="1" splitpos="453" zoom_1="-1" zoom_2="-1">
+		<Cursor>
+			<Cursor1 position="9181" topLine="441" />
+			<Cursor2 position="7844" topLine="375" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/print.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2275" topLine="163" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/idtgdt.c" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="7" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="766" topLine="25" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/int.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="194" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/mouse.c" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/screen.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1933" topLine="65" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/entry.S" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="7" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6510" topLine="207" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/makefile" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1268" topLine="25" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/include/x86.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/main.c" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4986" topLine="150" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/include/font.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../../os/kernel/kernel.ld" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="265" topLine="0" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>

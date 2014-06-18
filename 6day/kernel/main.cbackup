@@ -1,0 +1,95 @@
+
+/**********************************************************************
+
+ **********************************************************************/
+#include<header.h>
+#include<fontascii.h>
+
+//需要用到的函数，halt,cli,out8,read_eflags,write_eflags,这些函数在x86.h中
+//init _palette, set_palette 这两个函数我想放在screen.c中
+
+
+void bootmain(void)
+{
+static char font[16];
+static char try[]={
+0x00,0xE0,0x10,0x08,0x08,0x10,0xE0,0x00,0x00,0x0F,0x10,0x20,0x20,0x10,0x0F,0x00,
+};
+
+static unsigned short try16[]={
+ 0x0000, 0x0100, 0x0180, 0x01C0, 0x01F0, 0x0198, 0x0188, 0x0180,
+         0x0180, 0x0180, 0x0180, 0x0180, 0x0180, 0x0180, 0x0180, 0x0180,
+         0x0180, 0x0180, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+};
+//在这里面要一个设置显卡模式的函数。
+ 
+  // io_halt();  //有效
+   clear_screen(40);   //read
+
+ //  color_screen(15);   //white
+  //x86上，类似单片机编程的感觉，直接有指针访问Vram
+ 
+// char *vram;
+// short xsize,ysize;
+// short *binfo_scrnx,*binfo_scrny;
+// int *binfo_vram;
+// binfo_scrnx=(short *)0xff4;
+// binfo_scrny=(short *)0xff6;
+// xsize=*binfo_scrnx;
+// ysize=*binfo_scrny;
+// binfo_vram=(int *)0xff8;
+// vram=(char *)*binfo_vram
+/*  
+  struct boot_info *bootp=(struct boot_info *)0xff0;
+  char cylinder=bootp->cylinder;
+  char led=bootp->led;
+  char vmode=bootp->color_mode;
+  char *vram;
+  vram=bootp->vram;*/
+  //use *p ,fill color screen
+  
+  
+  init_screen((struct boot_info * )0xff0);
+
+ ///init_palette();  //
+   draw_window();
+#define black 0
+#define red   1
+#define green 2
+// setA(font);
+// putfont8((char *)VRAM ,320,0,4,black,(char *)font);
+// setB(font);
+// putfont8((char *)VRAM ,320,11,4,red,(char *)font);
+// setC(font);
+// putfont8((char *)VRAM ,320,19,4,green,(char *)font);
+// set0(font);
+// putfont8((char *)VRAM ,320,27,4,green,(char *)font);
+// 
+// 
+// 
+// putfont16((char *)VRAM ,320,51,4,green,(unsigned short *)('a'*24+ASCII_Table));
+// putfont16((char *)VRAM ,320,67,4,green,(unsigned short *)('b'*24+ASCII_Table));
+// putfont16((char *)VRAM ,320,83,4,green,(unsigned short *)('c'*24+ASCII_Table));
+// puts16((char *)VRAM,320,30,40,black,"hello,print\n next line");
+/*  //display ascii
+int i;
+int x=0,y=4;
+for(i=0;i<128;i++)
+{
+  putfont8((char *)VRAM ,320,x,y,black,(char *)(Font8x16+'a'*16));
+  x+=8;
+  if(x>311)
+  {
+    x=0;
+    y=y+18;
+  }
+  
+  
+}
+*/
+puts8((char *)VRAM ,320,0,0,black,"hello,word");
+puts16((char *)VRAM ,320,0,16,black,"hello,word");
+
+
+ while(1);
+}

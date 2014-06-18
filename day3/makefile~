@@ -1,0 +1,17 @@
+src=hello.S
+obj=hello.o
+elf=boot.elf
+kernel=boot.out
+asm=boot.asm
+
+all:
+	gcc -c $(src) -m32 -o $(obj)
+	ld -m elf_i386 $(obj) -e start -Ttext 0x7c00 -o $(elf)
+	objcopy -S -O binary -j .text $(elf)  $(kernel)
+	objdump -S $(elf) > $(asm)
+
+
+run:all
+	qemu -fda $(kernel)
+clean:
+	-rm -f $(obj) $(elf) $(kernel) $(asm)

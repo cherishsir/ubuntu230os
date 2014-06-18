@@ -1,0 +1,10 @@
+显示u盘的chs有多大：
+
+使用方法
+make
+make fat12
+make writeusb
+
+
+或是插上u盘后，使用qemu来读启动u盘
+make runusb

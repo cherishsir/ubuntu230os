@@ -1,0 +1,358 @@
+  1 |
+  2 |       boot.s
+  3 |
+  4
+  6 |１：boot.s这部分的代码由bios放到了0x7c00的内存地址，然后代码把自己moves到 address 0x90000.然后jumps there,
+  　　２：把利用bios的中断程序把system 加载到0x10000，
+  　　３：关中断，接着把system移动到0x0000处，
+     ４：改变到保护模式(protected mode)
+     5:然后跳转到0x0000 (也就是system的起点处)
+     ６：system会　以自己的方式，重新初始化　保护模式，主要是重设gdt ,idt，
+     ７：然后开启中断
+    
+    
+    注意０：现在的system文件最多不能起过8*65536（2的１９次的长度）字节长，size=0x80000
+    在当时512kB的kernel size就足够了。因为低１ＭＢ的地址空间，只有６４0KＢ是可用的，其它
+    的地址间留给也io devices.高于１ＭＢ的地址空间需要分页(paging)，低１ＭＢ的地址范围要保证
+    与物理地址match
+ 1
+    注意１：
+ 22 | NOTE1 abouve is no longer valid in it's entirety. cache-memory is allocated
+ 23 | above the 1Mb mark as well as below. Otherwise it is mainly correct.
+ 24 |
+ 　　注意２：启动盘的选择要在编译时确定，（就是说dl=0x00是在编译时确定的），利用下面的equ伪指令
+ 　　来指令启动盘的driver type.dl=多少。　在启动程序中，写一段程序来寻找正确的disk type是非常脑残的行为，
+ 　　这是Ｌinux的想法，如果你的启动设备不同，如果从硬盘或是软盘启动，只需要修改一个equ指定的dl=多少代表的disk type
+ 　　
+ 　　在boot-up 程序中写寻找disk type的程序是没有意义的。
+ 　　
+ 25　　这个512字节的loader程序已经尽力写到了最简单，（这部分的代码已经进入到了protected mode），
+ 　　　
+ 　　　程序中，如果连续的读软盘出错，会导致进入while(1);，这时你只有手动重启电脑了。
+ 　　　
+ 　　　加载软盘的内容到ram是非常的快的，因为利用了get whole sectors at a time这种方法。
+ 　　　
+
+ 32 
+ 这也是宏定义：
+ 33 | 1.44Mb disks:　chs=80x2x18
+ 34 sectors = 18
+ 35 | 1.2Mb disks:
+ 36 | sectors = 15   chs=80x2x15
+ 37 | 720kB disks:
+ 38 | sectors = 9    chs=80x2x9
+ 39 
+ 40 .globl begtext, begdata, begbss, endtext, enddata, endbss
+ 41 .text
+ 42 begtext:
+ 43 .data
+ 44 begdata:
+ 45 .bss
+ 46 begbss:
+ 47 .text
+ 48 ;这一部分是宏定义  代码的原始segment ，复制后的segment,　system这个文件的segment,system的文件end 地址
+ 49 BOOTSEG = 0x07c0
+ 50 INITSEG = 0x9000
+ 51 SYSSEG  = 0x1000                        | system loaded at 0x10000 (65536).
+ 52 ENDSEG  = SYSSEG + SYSSIZE
+ 53 
+ ；为什么把自己复制到0x9000地址处呢，因为是个整数，方便后面复制system好计算。用整数做段地址好处是非常多的。
+ 54 entry start
+ 55 start:
+ 56         mov     ax,#BOOTSEG
+ 57         mov     ds,ax
+ 58         mov     ax,#INITSEG
+ 59         mov     es,ax
+ 60         mov     cx,#256
+ 61         sub     si,si
+ 62         sub     di,di
+ 63         rep
+ 64         movw
+ 65         jmpi    go,INITSEG	　；　这一句完成跳转到0x9000:go地址　执行代码
+ 66 go:     mov     ax,cs
+ 67         mov     ds,ax
+ 68         mov     es,ax
+ 69         mov     ss,ax
+ 70         mov     sp,#0x400       ;（任意的值，只要大于＝512字节就好）arbitrary value >>512　　　因为复制后bootsector的代码在物理地址0x90000到0x90200,
+				　　　;而让sp=0x400就是把地址从0x90200到0x90400的地址范围做stack用.所以stack的大小正好是512字节(ss:sp=0x9000:0x400)
+ 71 
+ 72         mov     ah,#0x03        ;read cursor pos  读光标的位置和形状，。ah=0x03,bh=0x00(第０页的光标位置） int 0x10,研究int 0x10的ah=0x03的功能
+ 73         xor     bh,bh
+ 74         int     0x10　　　　　　　 ;返回值，代表的意思：DH = Row, DL = Column（dh,dl对下面的int 0x10,ah=0x13很重要）
+ 75         
+ 76         mov     cx,#24　　　　　　;一共有24个字符　　显示“\n\rLoading system ...\n\r\n\r”
+ 77         mov     bx,#0x0007      | page 0, attribute 7 (normal)
+ 78         mov     bp,#msg1        ;bp放的是第一个字符的地址
+ 79         mov     ax,#0x1301      ;write string, move cursor　ah=0x13,写字符串 al=0x01，:写一个字符,update一下cursor，起点是以DH,DL开始（dh dl = row,column at which to start writing.)
+ 80         int     0x10
+ 81 
+ 82 ; ok, we've written the message, now　　　　　(好的，现在我们显示了loading system ...这条信息)
+ 83 ; we want to load the system (at 0x10000) 　（我们现在需要把软盘或是硬盘上的system文件加载到内存物理地址0x10000处）
+ 84 
+ 85         mov     ax,#SYSSEG　　　　
+ 86         mov     es,ax           ；sytem segment of 0x010000  　所以#SYSSEG=0x1000
+ 87         call    read_it　　　　　 ;＊＊＊＊＊＊read_it这个函数是非常重要的一个函数。　　读出错会while(1)　　　
+ 88         call    kill_motor
+ 89 
+    ；经过上面的read_it后，system程序就被读到了0x10000内存地址处。
+    ；如果读程序没有问题，得到当前cursor的位置dh,dl中，保存到0x90510内存地址。以备后用。
+ 90
+ 93         mov     ah,#0x03        | read cursor pos
+ 94         xor     bh,bh
+ 95         int     0x10            | save it in known place, con_init fetches
+ 96         mov     [510],dx        | it from 0x90510.
+ 97                 
+    ；现在　我们需要进入到保护模式...
+ 98 | now we want to move to protected mode ...
+ 99 
+100         cli                     | no interrupts allowed !
+101 
+102 | first we move the system to it's rightful place
+103 
+104         mov     ax,#0x0000
+105         cld                     | 'direction'=0, movs moves forward
+106 do_move:
+107         mov     es,ax           | destination segment
+108         add     ax,#0x1000
+109         cmp     ax,#0x9000      ;从这里可以看出把内存中 0x10000到0x90000之间的内容复制到了内存中0x00000地址处。算一下整个system的大小为size=0x80000=512kB的大小
+110         jz      end_move
+111         mov     ds,ax           | source segment
+112         sub     di,di
+113         sub     si,si
+114         mov     cx,#0x8000　　　　;每次复制0x10000个字节的内容到destination.
+115         rep
+116         movsw
+117         j       do_move
+118 
+119 | then we load the segment descriptors
+120 
+121 end_move:
+122 
+123         mov     ax,cs           ；right, forgot this at first. didn't work :-)　对了，一开始忘记了这个，所以代码不起作用。
+124         mov     ds,ax
+125         lidt    idt_48          | load idt with 0,0
+126         lgdt    gdt_48          | load gdt with whatever appropriate
+127 
+128 | that was painless, now we enable A20
+129 
+130         call    empty_8042
+131         mov     al,#0xD1                | command write
+132         out     #0x64,al
+133         call    empty_8042
+134         mov     al,#0xDF                | A20 on
+135         out     #0x60,al
+136         call    empty_8042
+137 
+138 | well, that went ok, I hope. Now we have to reprogram the interrupts :-(
+139 | we put them right after the intel-reserved hardware interrupts, at
+140 | int 0x20-0x2F. There they won't mess up anything. Sadly IBM really
+141 | messed this up with the original PC, and they haven't been able to
+142 | rectify it afterwards. Thus the bios puts interrupts at 0x08-0x0f,
+143 | which is used for the internal hardware interrupts as well. We just
+144 | have to reprogram the 8259's, and it isn't fun.
+145 
+146         mov     al,#0x11                | initialization sequence
+147         out     #0x20,al                | send it to 8259A-1
+148         .word   0x00eb,0x00eb           | jmp $+2, jmp $+2
+149         out     #0xA0,al                | and to 8259A-2
+150         .word   0x00eb,0x00eb
+151         mov     al,#0x20                | start of hardware int's (0x20)
+152         out     #0x21,al
+153         .word   0x00eb,0x00eb
+154         mov     al,#0x28                | start of hardware int's 2 (0x28)
+155         out     #0xA1,al
+156         .word   0x00eb,0x00eb
+157         mov     al,#0x04                | 8259-1 is master
+158         out     #0x21,al
+159         .word   0x00eb,0x00eb
+160         mov     al,#0x02                | 8259-2 is slave
+161         out     #0xA1,al
+162         .word   0x00eb,0x00eb
+163         mov     al,#0x01                | 8086 mode for both
+164         out     #0x21,al
+165         .word   0x00eb,0x00eb
+166         out     #0xA1,al
+167         .word   0x00eb,0x00eb
+168         mov     al,#0xFF                | mask off all interrupts for now
+169         out     #0x21,al
+170         .word   0x00eb,0x00eb
+171         out     #0xA1,al
+172 
+173 | well, that certainly wasn't fun :-(. Hopefully it works, and we don't
+174 | need no steenking BIOS anyway (except for the initial loading :-).
+175 | The BIOS-routine wants lots of unnecessary data, and it's less
+176 | "interesting" anyway. This is how REAL programmers do it.
+177 |
+178 | Well, now's the time to actually move into protected mode. To make
+179 | things as simple as possible, we do no register set-up or anything,
+180 | we let the gnu-compiled 32-bit programs do that. We just jump to
+181 | absolute address 0x00000, in 32-bit protected mode.
+182 
+183         mov     ax,#0x0001      | protected mode (PE) bit
+184         lmsw    ax              | This is it!
+185         jmpi    0,8             | jmp offset 0 of segment 8 (cs)
+186 
+187 | This routine checks that the keyboard command queue is empty
+188 | No timeout is used - if this hangs there is something wrong with
+189 | the machine, and we probably couldn't proceed anyway.
+190 empty_8042:
+191         .word   0x00eb,0x00eb
+192         in      al,#0x64        | 8042 status port
+193         test    al,#2           | is input buffer full?
+194         jnz     empty_8042      | yes - loop
+195         ret
+196 
+197 | This routine loads the system at address 0x10000, making sure
+198 | no 64kB boundaries are crossed. We try to load it as fast as
+199 | possible, loading whole tracks whenever we can.
+200 |
+201 | in:   es - starting address segment (normally 0x1000)
+202 |
+203 | This routine has to be recompiled to fit another drive type,
+204 | just change the "sectors" variable at the start of the file
+205 | (originally 18, for a 1.44Mb drive)
+206 |
+207 sread:  .word 1                 | sectors read of current track  secotor
+208 head:   .word 0                 | current head     head  
+209 track:  .word 0                 | current track    cylinder
+
+
+；这个函数决定了从什么软盘的什么地址读system文件到内存的什么地址。
+210 read_it:
+211         mov ax,es　　　　　　　　　；作者在这里做的很严谨，再次把es读回来，看es=0x1000是否被改变
+212         test ax,#0x0fff　　　　　 ;正常情况ax=es=0x1000，　test会做与操作。
+
+213 die:    jne die                 ;如果es不是与0x1000边界对齐的，程序就会死在这里while(1)
+
+214         xor bx,bx               ;bx是复制到内存中的起始地址bx=0,(es:bx=0x1000:0x0000)
+215 rp_read:
+216         mov ax,es               ;改变地址的时候，不动bx,只改变es,这样做是非常明智的，因为es一开始就是个整数。
+217         cmp ax,#ENDSEG          ;看是否读system文件到内存完毕。
+218         jb ok1_read             ;jump if below ok1_read　（没有完就跳到ok1_read 接着读），读完了就ret.
+219         ret
+
+
+
+;真正的读软盘上的system文件到　内存0x10000地址的程序
+220 ok1_read:
+221         mov ax,#sectors　　　　　；sectors是开始的宏定义，根据自己的软盘的不同，定义了不同的sectors大小。 ax=18
+222         sub ax,sread　　　　　　　;ax=ax-1;ax=17  ,因为是从第一个扇区是bootsector，所以从第二扇区开始读　才是system的位置
+223         mov cx,ax		    ;cx=ax=17=0x00 11
+224         shl cx,#9               ;cx=0x2200=8704                   (cx=cx *512=17*512=8704)
+225         add cx,bx               ;cx=cx+bx    cx最大６５５３５　当cx+bx的和大于65536时，才会执行下面的xor ax,ax指令
+226         jnc ok2_read       
+227         je ok2_read
+228         xor ax,ax
+229         sub ax,bx
+230         shr ax,#9
+231 ok2_read:
+232         call read_track　　　　；读cylinder的程序，也就是说每闪根据chs,读１x17个扇区数到内存？？
+233         mov cx,ax　　　　　　　 ;cx=17
+234         add ax,sread          ;ax=18
+235         cmp ax,#sectors
+236         jne ok3_read          ;not  equal时就不是读c0 h0了
+237         mov ax,#1
+238         sub ax,head　　　　　　;如果head处放的是0,ax=1,如果head处放的是1,ax=0
+239         jne ok4_read
+240         inc track           ;如果head=1时，就需要cylinder++了
+241 ok4_read:
+242         mov head,ax　　　　　 ;保存当前ax到head
+243         xor ax,ax
+244 ok3_read:
+245         mov sread,ax        ;sread 清０
+246         shl cx,#9
+247         add bx,cx
+248         jnc rp_read
+249         mov ax,es
+250         add ax,#0x1000
+251         mov es,ax
+252         xor bx,bx
+253         jmp rp_read
+254 
+
+
+255 read_track:
+256         push ax 
+257         push bx
+258         push cx
+259         push dx
+
+26
+261         mov cx,sread　　;sread内存中记录着当前读软盘的哪一个sector
+262         inc cx　　　　　 ;cx++ 　为什么要＋＋　　因为system保存在软盘的第c0h0s2的位置，所以要使cx=2，读的扇区数也应该只有al=17
+           
+           　mov dx,track 　;cylinder 放在内存中记录着，　０
+263         mov ch,dl       ;cylinder最大８０个，dl足矣保存。 ch=当前cyliner　cl=当前secotor 
+
+264         mov dx,head　　　;这４条语句也太严谨了吧，dh=head number(0 or1),dl=0x00就是drive number ，如是u盘，这里就需要修改了
+265         mov dh,dl
+266         mov dl,#0
+267         and dx,#0x0100
+
+268         mov ah,#2　　　　al:中记录着要　读的扇区数的　数量。　ah=read sectors into memory,al=17,cl=2,ch=cylinder,dh=head number(0 or 1)
+269         int 0x13       ;成功后，软盘的0　0　2到0　0　18的内容就读到了memory的0x10000开始的位置
+
+270         jc bad_rt　　　；读取track 失败了，bad read track
+
+271         pop dx
+272         pop cx
+273         pop bx
+274         pop ax
+275         ret
+
+
+276 bad_rt: mov ax,#0　　;reset floppy
+277         mov dx,#0
+278         int 0x13
+279         pop dx
+280         pop cx
+281         pop bx
+282         pop ax
+283         jmp read_track   ;重读
+284 
+
+285 /*
+286  * This procedure turns off the floppy drive motor, so
+287  * that we enter the kernel in a known state, and
+288  * don't have to worry about it later.
+289  */
+290 kill_motor:
+291         push dx
+292         mov dx,#0x3f2
+293         mov al,#0
+294         outb
+295         pop dx
+296         ret
+297 
+298 gdt:
+299         .word   0,0,0,0         | dummy　　０
+300 
+301         .word   0x07FF          | 8Mb - limit=2047 (2048*4096=8Mb)　　１
+302         .word   0x0000          | base address=0
+303         .word   0x9A00          | code read/exec
+304         .word   0x00C0          | granularity=4096, 386
+305 
+306         .word   0x07FF          | 8Mb - limit=2047 (2048*4096=8Mb)　　２
+307         .word   0x0000          | base address=0
+308         .word   0x9200          | data read/write
+309         .word   0x00C0          | granularity=4096, 386
+310 
+311 idt_48:
+312         .word   0                       | idt limit=0
+313         .word   0,0                     | idt base=0L
+314 
+315 gdt_48:
+316         .word   0x800           | gdt limit=2048, 256 GDT entries
+317         .word   gdt,0x9         | gdt base = 0X9xxxx
+318         
+319 msg1:
+320         .byte 13,10
+321         .ascii "Loading system ..."
+322         .byte 13,10,13,10
+323 
+324 .text
+325 endtext:
+326 .data
+327 enddata:
+328 .bss
+329 endbss:
