@@ -116,7 +116,7 @@ with parameters. In this case, we do not use function pointers, but limit the fu
 
 #ifndef GUI_SUPPORT_ROTATION
   #if GUI_COMPILER_SUPPORTS_FP
-    #define GUI_SUPPORT_ROTATION 1
+    #define GUI_SUPPORT_ROTATION 0
   #else
     #define GUI_SUPPORT_ROTATION 0
   #endif

@@ -17,7 +17,7 @@ addr=0xc400
 
 #will generate  entry.o asmint32.o
 %.o:%.S
-	$(CC) -nostdinc $(CFLAGS) -c -o $@ $<
+	$(CC) -g -nostdinc $(CFLAGS) -c -o $@ $<
 
 
 
@@ -36,6 +36,8 @@ head:
 	@echo "addr=$(addr)"
 	$(LD)  $(LDFLAGS) -N -e entry -Ttext 0xc400 -o $@.out $^
 	$(OBJDUMP) -S -D $@.out >$@.asm
+	$(OBJCOPY) --only-keep-debug $@.out head.sym
+	cp head.sym ../
 	$(OBJCOPY) -S -O binary -j .text $@.out $@
 
 #generate ckernel

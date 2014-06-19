@@ -235,28 +235,28 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 /* MONO: Monospaced fonts */
 DECLARE_FONT(MONO);
 #define GUI_FONTTYPE_MONO       \
-  (GUIMONO_DispChar-0x280000),             \
-	(GUIMONO_GetCharDistX-0x280000),         \
-	(GUIMONO_GetFontInfo-0x280000),          \
-	(GUIMONO_IsInFont-0x280000),             \
+  (GUIMONO_DispChar),             \
+	(GUIMONO_GetCharDistX),         \
+	(GUIMONO_GetFontInfo),          \
+	(GUIMONO_IsInFont),             \
     (tGUI_ENC_APIList*)0
 
 /* PROP: Proportional fonts */
 DECLARE_FONT(PROP);
 #define GUI_FONTTYPE_PROP       \
-  (GUIPROP_DispChar-0x280000),             \
-	(GUIPROP_GetCharDistX-0x280000),         \
-	(GUIPROP_GetFontInfo-0x280000) ,         \
-	(GUIPROP_IsInFont-0x280000),             \
+  (GUIPROP_DispChar),             \
+	(GUIPROP_GetCharDistX),         \
+	(GUIPROP_GetFontInfo) ,         \
+	(GUIPROP_IsInFont),             \
   (tGUI_ENC_APIList*)0
 
 /* PROP: Proportional fonts SJIS */
 DECLARE_FONT(PROP);
 #define GUI_FONTTYPE_PROP_SJIS  \
-  (GUIPROP_DispChar-0x280000),             \
-	(GUIPROP_GetCharDistX-0x280000),         \
-	(GUIPROP_GetFontInfo-0x280000),          \
-	(GUIPROP_IsInFont-0x280000),             \
+  (GUIPROP_DispChar),             \
+	(GUIPROP_GetCharDistX),         \
+	(GUIPROP_GetFontInfo),          \
+	(GUIPROP_IsInFont),             \
   &GUI_ENC_APIList_SJIS
 
 /* PROPAA: Proportional, antialiased fonts */

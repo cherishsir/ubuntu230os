@@ -20,8 +20,6 @@ void init_pit(TIMERCTL *timerctl)
  }
   timerctl->number=0;
   timerctl->count=0;
-
-
  return;
 }
 

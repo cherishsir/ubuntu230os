@@ -83,10 +83,10 @@ static int _Encode(char *s, U16 Char) {
 *       _API_Table
 */
 const GUI_UC_ENC_APILIST GUI__API_TableNone = {
- ( _GetCharCode-0x280000),     /*  return character code as U16 */
- ( _GetCharSize-0x280000),     /*  return size of character: 1 */
-  (_CalcSizeOfChar-0x280000),  /*  return size of character: 1 */
-  (_Encode-0x280000)        /*  Encode character */
+  _GetCharCode,     /*  return character code as U16 */
+  _GetCharSize,     /*  return size of character: 1 */
+  _CalcSizeOfChar,  /*  return size of character: 1 */
+  _Encode       /*  Encode character */
 };
 
 /*********************************************************************

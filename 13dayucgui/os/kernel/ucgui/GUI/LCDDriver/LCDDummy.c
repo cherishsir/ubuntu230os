@@ -302,6 +302,7 @@ static void  _DrawBitLine8BPP(int x, int y, U8 const GUI_UNI_PTR * p, int xsize,
           LCD_L0_SetPixelIndex(x, y, *p);
         }
       }
+
       break;
     case LCD_DRAWMODE_TRANS:
       if (pTrans) {
@@ -319,8 +320,10 @@ static void  _DrawBitLine8BPP(int x, int y, U8 const GUI_UNI_PTR * p, int xsize,
           }
         }
       }
+
       break;
   }
+
 }
 #endif
 
@@ -499,6 +502,7 @@ void LCD_L0_DrawBitmap(int x0, int y0,
         _DrawBitLine2BPP(x0, i + y0, pData, Diff, xsize, pTrans);
         break;
     #endif
+
     #if (LCD_MAX_LOG_COLORS > 4)
       case 4:
         _DrawBitLine4BPP(x0, i + y0, pData, Diff, xsize, pTrans);
@@ -516,6 +520,8 @@ void LCD_L0_DrawBitmap(int x0, int y0,
     #endif
     }
     pData += BytesPerLine;
+
+
   }
 }
 

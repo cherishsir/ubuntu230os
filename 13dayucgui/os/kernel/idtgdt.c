@@ -46,9 +46,9 @@ void  init_gdtidt()
     setgdt(gdt+i,0,0,0);
   }
   setgdt(gdt+1,0xffffffff   ,0x00000000,0x4092);//entry.s main.c data 4GB空间的数据都能访问
-  setgdt(gdt+2,0x000fffff   ,0x00000000,0x409a);//entry.S code
-  setgdt(gdt+3,0x000fffff   ,0x00280000,0x409a);  //main.c code　 0x7ffff=512kB
-
+  setgdt(gdt+2,0x000fffff   ,0x00000000,0xc09a);//entry.S code
+  //setgdt(gdt+3,0x000fffff   ,0x00280000,0x409a);  //main.c code　 0x7ffff=512kB
+  setgdt(gdt+3,0xffffffff   ,0x00000000,0x409a);//entry.S code
    load_gdtr(0xfff,0X00270000);//this is right
 
   for(i=0;i<256;i++)
@@ -58,12 +58,12 @@ void  init_gdtidt()
 
   for(i=0;i<256;i++)
   {
-      setidt(idt+i,(int)asm_inthandler21,3*8,0x008e);//用printdebug显示之后，证明这一部分是写进去了
+      setidt(idt+i,(int)asm_inthandler21,2*8,0x008e);//用printdebug显示之后，证明这一部分是写进去了
 
   }
-  setidt(idt+0x20,(int)asm_inthandler20-0x280000,3*8,0x008e);//挂载timer interrrupt service 汇编程序
-  setidt(idt+0x21,(int)asm_inthandler21-0x280000,3*8,0x008e);//挂载keyboard interrupt service汇编程序
-  setidt(idt+0x2c,(int)asm_inthandler2c-0x280000,3*8,0x008e);//挂载mouse 　　interrupt service汇编程序
+  setidt(idt+0x20,(int)asm_inthandler20,2*8,0x008e);//挂载timer interrrupt service 汇编程序
+  setidt(idt+0x21,(int)asm_inthandler21,2*8,0x008e);//挂载keyboard interrupt service汇编程序
+  setidt(idt+0x2c,(int)asm_inthandler2c,2*8,0x008e);//挂载mouse 　　interrupt service汇编程序
 
  // setidt(idt+0x21,(int)asm_inthandler21,2*8,0x008e);//挂载keyboard interrupt service
  // setidt(idt+0x2c,(int)asm_inthandler2c,2*8,0x008e);//挂载mouse 　　interrupt serv

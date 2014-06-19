@@ -84,6 +84,7 @@ void GUIMONO_DispChar(U16P c) {
     {
 
       U8 OldMode = LCD_SetDrawMode(DrawMode);
+
       LCD_DrawBitmap( x, y,
                          XSize, YSize,
                          GUI_Context.pAFont->XMag,  GUI_Context.pAFont->YMag,
@@ -95,7 +96,9 @@ void GUIMONO_DispChar(U16P c) {
 
 
 
+
       if (c1 != -1) {
+
         LCD_SetDrawMode(DrawMode | LCD_DRAWMODE_TRANS);
         LCD_DrawBitmap( x, y,
                            XSize, YSize,
@@ -106,7 +109,9 @@ void GUIMONO_DispChar(U16P c) {
                            &LCD_BKCOLORINDEX
                            );
 
+
       }
+
       /* Fill empty pixel lines */
       if (GUI_Context.pAFont->YDist > GUI_Context.pAFont->YSize) {
         if (DrawMode != LCD_DRAWMODE_TRANS) {
@@ -117,12 +122,16 @@ void GUIMONO_DispChar(U16P c) {
                        y + GUI_Context.pAFont->YDist);
         }
       }
+
       LCD_SetDrawMode(OldMode);
+
     }
+
   }
 //houhh 20061119...
 //  GUI_Context.DispPosX+=pMono->XDist;
   GUI_Context.DispPosX+=pMono->XDist * GUI_Context.pAFont->XMag;
+
 
 }
 

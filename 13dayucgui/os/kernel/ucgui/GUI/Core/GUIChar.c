@@ -49,16 +49,25 @@ void GL_DispChar(U16 c) {
   }
   else
   {
+
         if (c != '\r')
          {
+
+
+
           GUI_LOCK();
           GUI_Context.pAFont->pfDispChar(c);
+
+
           if (GUI_pfDispCharStyle)
           {
-            GUI_pfDispCharStyle(c);
+          //  printdebug(48,0);while(1);
+           GUI_pfDispCharStyle(c);
           }
           GUI_UNLOCK();
        }
+
+
   }
 }
 

@@ -64,6 +64,7 @@ void GUI_DispString(const char GUI_UNI_PTR *s) {
     r.y1 = r.y0 + FontSizeY - 1;
 
     GUI__DispLine(s, LineNumChars, &r);
+
     GUI_Context.DispPosY = r.y0;
     s += GUI_UC__NumChars2NumBytes(s, LineNumChars);
     if ((*s == '\n') || (*s == '\r')) {

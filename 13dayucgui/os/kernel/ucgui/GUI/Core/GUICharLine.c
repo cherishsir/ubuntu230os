@@ -37,13 +37,14 @@ static void _DispLine(const char GUI_UNI_PTR *s, int MaxNumChars, const GUI_RECT
     if (GUI_RectsIntersect(GUI_Context.pClipRect_HL, pRect) == 0)
       return;
   }
-  #if GUI_COMPILER_SUPPORTS_FP
-  if (GUI_Context.pAFont->pafEncode) {
-    GUI_Context.pAFont->pafEncode->pfDispLine(s, MaxNumChars);
-  } else {
-  #else
+
+ // #if GUI_COMPILER_SUPPORTS_FP
+  //if (GUI_Context.pAFont->pafEncode) {
+ //  GUI_Context.pAFont->pafEncode->pfDispLine(s, MaxNumChars);
+ // } else {
+ // #else
   {
-  #endif
+ // #endif
     U16 Char;
     while (--MaxNumChars >= 0) {
       Char = GUI_UC__GetCharCodeInc(&s);
@@ -136,7 +137,9 @@ void GUI__DispLine(const char GUI_UNI_PTR *s, int MaxNumChars, const GUI_RECT* p
       GUI_Context.DispPosX = r.x0;
       GUI_Context.DispPosY = r.y0;
       /* Do the actual drawing via routine call. */
+
       _DispLine(s, MaxNumChars, &r);
+
     #if GUI_WINSUPPORT
     } WM_ITERATE_END();
     WM_SUBORG(GUI_Context.DispPosX, GUI_Context.DispPosY);

@@ -14,7 +14,6 @@
 #define red   1
 #define green 2
 extern  GUI_CONTEXT        GUI_Context;
-
 TIMERCTL *gtimerctl;//global gtimerctl
 
 void bootmain(void)
@@ -24,7 +23,8 @@ void bootmain(void)
 struct boot_info *bootp=(struct boot_info *)ADDR_BOOT;
 init_screen((struct boot_info * )bootp);
 init_palette();  //color table from 0 to 15
-clear_screen(8);   	//red
+clear_screen(2);   	//red
+//while(1);
 //draw_window();
 int mx,my;//mouse position
 cli();
@@ -73,7 +73,7 @@ init_pit(timerctl);//init timerctl
 //printdebug((int)timerctl,0);
 
 
-draw_win_buf(desktop);
+
 struct FIFO8 timerfifo;
 char timerbuf[8];
 TIMER *timer,*timer2,*timer3;
@@ -120,15 +120,51 @@ sheet_updown(sht_mouse,2);
 //refresh a specific rectangle
 sheet_refresh(sht_back,0,0,bootp->xsize,bootp->ysize);
 struct MOUSE_DEC mdec;
-//enable cpu interrupt
+//enable cpu interruptmak
 enable_mouse(&mdec);   //这里会产生一个mouse interrupt
+//draw_win_buf(desktop);
+
+GUI_Init();
+
+
+GUI_SetBkColorIndex(2);
+GUI_SetColorIndex(2);
+GUI_SetTextStyle(GUI_TS_NORMAL);//GUI_TS_NORMAL GUI_TS_UNDERLINE GUI_TS_STRIKETHRU
+GUI_Clear();
+draw_win_buf(desktop);
+unsigned yn,xn;
+for(yn=0;yn<4;yn++)
+{
+ for(xn=0;xn<6;xn++)
+ {
+  GUI_SetColorIndex(15-xn);
+  GUI_DrawCircle(xn*50+25,yn*50+25,25);
+   GUI_SetColorIndex(xn);
+  GUI_FillCircle(xn*50+25,yn*50+25,25);
+  GUI_SetColorIndex(xn+1);
+  GUI_FillCircle(xn*50+25,yn*50+25,20);
+ }
+}
+GUI_DispCharAt('b',150,0);
+GUI_SetFont(&GUI_Font8x8);
+  GUI_Context.TextMode=1;
+  GUI_Context.DispPosX = 200;
+  GUI_Context.DispPosY = 30;
+  GUI_DispString("hello world");
+  /*
+*/
+sheet_refresh(sht_back,0,0,bootp->xsize,bootp->ysize);
+//printdebug(GUI_DispCharAt,0);
+
+
+
 
 while(1)
  {
     sprintf(s,"%d ",timerctl->count);
     wrtrfrsh(sht_win,20,28,0,7,s,7);
 
- sti();
+   sti();
    if(fifo8_status(&keyfifo) +
    fifo8_status(&mousefifo)  +
    fifo8_status(&timerfifo)

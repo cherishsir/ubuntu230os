@@ -22,6 +22,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../os/bootloader.S" />
 		<Unit filename="../../os/bootloader.asm" />
 		<Unit filename="../../os/bootloaderusb.asm" />
 		<Unit filename="../../os/kernel/asmint32.S" />

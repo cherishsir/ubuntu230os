@@ -142,6 +142,7 @@ protcseg:
   movw    %ax, %ss                # -> SS: Stack Segment
 
   # Set up the stack pointer and call into C.
+ # mov    $0x400000,%eax
   movl    $start, %esp
   #call bootmain
 
@@ -163,31 +164,19 @@ bootsector:
   call memcpy
 all:
 #把整个软盘上的内容复制到 0x100000内存地址处
-  movl $(DSKCAC0+512), %esi
-  movl $(DSKCAC+512) , %edi
+  movl $(DSKCAC0+512), %esi  //0x8000
+  movl $(DSKCAC+512) , %edi  //0x100000
   movl $0,%ecx
   movb (CYLS),%cl
-  imul $(512*18*2/4) , %ecx
+  imul $(512*18*2/4) , %ecx  //软盘大小的内容
   subl  $(512/4),       %ecx
   call memcpy
-
-
-#下面的这部分不明白，先不管了   这 一部分还真有可能是bootpack的头文件。  这一部分是小日本自己写的一个header,用了小日本自己的工具，所以我没有要这个header
-  #movl $BOTPAK ,%ebx  ；ebx=0x280000
-  #movl 16(%ebx),%ecx    ecx= int (*0x280010) 跳过16个字节
-  #addl  $3     ,%ecx    ecx=ecx+3
-  #shr   $2     ,%ecx    ecx=ecx/4   ecx中放的是c部分代码的大小
-  #jz   skip
-  #movl 20(%ebx),%esi
- #addl %ebx    ,%esi
-  #movl 12(%ebx),%edi
- # call memcpy
-
-#skip:
- # movl 12(%ebx),%esp
  #直接跳转到c语言的地址处，所以c函数在编译时要使用0x280000这个地址。
- ljmp  $(3*8), $0x0000
- #ljmp  $(1*8), $main
+
+#下面这种跳转在实际的硬件中是有问题的，不知为何
+  //pushl $0x300000
+  //retl
+  jmp  $(2*8), $0x280000
 
 #每次复制4个字节 ，因为这是32位的代码了
 memcpy:
@@ -209,9 +198,9 @@ memcpy:
 gdt:
   .word 0x0000,0x0000,0x0000,0x0000  #need a flag
   .word 0xffff,0x0000,0x9200,0x00cf  #data selector 1
-  .word 0xffff,0x0000,0x9a00,0x0047  #entry code    2
-  .word 0xffff,0x0000,0x9a28,0x0047  #c code        3
-  .word 0x00
+  .word 0xffff,0x0000,0x9a00,0x00c7  #entry code    2
+  .word 0xffff,0x0000,0x9a28,0x00c7  #c code        3
+  .word 0x00                         # 0x479a vip
 
 
 

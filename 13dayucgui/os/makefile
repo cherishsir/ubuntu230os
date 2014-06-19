@@ -23,6 +23,7 @@ copy:all
 
 #run os as a harddisk , i don`t use "if=floppy"
 run:copy
+	#qemu -s -S  $(boot)
 	qemu   -drive file=$(boot)
 
 

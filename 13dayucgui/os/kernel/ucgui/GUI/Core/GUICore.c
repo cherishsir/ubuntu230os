@@ -70,7 +70,6 @@ static void _InitContext(GUI_CONTEXT* pContext) {
     pContext->pLCD_HL      = &_HL_APIList;
   #endif
   pContext->pAFont       = GUI_DEFAULT_FONT;
-  pContext->pAFont        = &GUI_Font6x8;
   pContext->pClipRect_HL = &GUI_Context.ClipRect;
   pContext->PenSize      = 1;
   /* Variables in WM module */

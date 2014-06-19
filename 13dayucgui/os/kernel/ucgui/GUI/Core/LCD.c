@@ -158,15 +158,15 @@ void LCD_DrawBitmap(int x0, int y0, int xsize, int ysize, int xMul, int yMul,
 
  #if GUI_SUPPORT_ROTATION
   if (GUI_pLCD_APIList) {
-   // GUI_pLCD_APIList->pfDrawBitmap(x0, y0, xsize, ysize, xMul, yMul, BitsPerPixel, BytesPerLine, pPixel, pTrans);
-   // return;
+
+    GUI_pLCD_APIList->pfDrawBitmap(x0, y0, xsize, ysize, xMul, yMul, BitsPerPixel, BytesPerLine, pPixel, pTrans);
+  //   return;
   }
   #endif
+
   /* Handle the optional Y-magnification */
   y1 = y0 + ysize - 1;
   x1 = x0 + xsize - 1;
- //  printdebug(11,0);
- //                        while(1);
 /*  Handle BITMAP without magnification */
   if ((xMul | yMul) == 1) {
 
@@ -228,6 +228,7 @@ void LCD_DrawBitmap(int x0, int y0, int xsize, int ysize, int xMul, int yMul,
     LCDDEV_L0_DrawBitmap   (x0,y0, xsize, ysize, BitsPerPixel, BytesPerLine, pPixel, Diff, pTrans);
   } else {
 
+
     /**** Handle BITMAP with magnification ***/
     int x,y;
     int yi;
@@ -262,6 +263,7 @@ void LCD_DrawBitmap(int x0, int y0, int xsize, int ysize, int xMul, int yMul,
       }
     }
   }
+
 }
 
 /*********************************************************************

@@ -71,14 +71,18 @@ void GUI_DispChar(U16 c) {
 */
 void GUI_DispCharAt(U16 c, I16P x, I16P y) {
   GUI_LOCK();
+
   GUI_Context.DispPosX = x;
   GUI_Context.DispPosY = y;
   #if (GUI_WINSUPPORT)
     CL_DispChar(c);
   #else
+
     GL_DispChar(c);
+
   #endif
   GUI_UNLOCK();
+
 }
 
 /*************************** End of file ****************************/
