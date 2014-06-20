@@ -4,11 +4,11 @@
 <table>
 <tr>
 <th>
-<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui.png" width="200" height="200">
+<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui.png" width="400" height="400">
 </th>
 
 <th>
-<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui1.png" width="200" height="200">
+<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui1.png" width="400" height="400">
 </th>
 </tr>
 </table>
