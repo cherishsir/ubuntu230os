@@ -3,4 +3,4 @@
 ![https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui.png](https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui.png)
 
 
-<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui.png">
+<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/ucgui1.png" width="50" height="50">
