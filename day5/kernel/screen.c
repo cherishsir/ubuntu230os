@@ -225,7 +225,9 @@ unsigned char pt;
 unsigned int x,y;
 for (y=0;y<16;y++)
 {
+//char *font=Font8x16;
 pt =Font8x16[y+ch*16];
+ // pt=font[y+ch*16];
     for (x=0;x<8;x++)
     {
 

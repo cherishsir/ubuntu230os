@@ -220,7 +220,7 @@ ccode:
   movl $(512*1024/4),%ecx
     c4d5:	b9 00 00 02 00       	mov    $0x20000,%ecx
   call memcpy
-    c4da:	e8 41 00 00 00       	call   c520 <memcpy>
+    c4da:	e8 40 00 00 00       	call   c51f <memcpy>
 
 0000c4df <bootsector>:
   #ljmp   $(2*8),$0x0000
@@ -233,7 +233,7 @@ bootsector:
   movl $(512/4),%ecx
     c4e9:	b9 80 00 00 00       	mov    $0x80,%ecx
   call memcpy
-    c4ee:	e8 2d 00 00 00       	call   c520 <memcpy>
+    c4ee:	e8 2c 00 00 00       	call   c51f <memcpy>
 
 0000c4f3 <all>:
 all:
@@ -251,34 +251,34 @@ all:
   subl  $(512/4),       %ecx
     c50e:	81 e9 80 00 00 00    	sub    $0x80,%ecx
   call memcpy
-    c514:	e8 07 00 00 00       	call   c520 <memcpy>
-  #movl 12(%ebx),%edi
- # call memcpy  
+    c514:	e8 06 00 00 00       	call   c51f <memcpy>
   
-#skip:
- # movl 12(%ebx),%esp
- ljmp  $(3*8), $0x0000
-    c519:	ea 00 00 00 00 18 00 	ljmp   $0x18,$0x0
+ pushl $0x280000
+    c519:	68 00 00 28 00       	push   $0x280000
+ ret
+    c51e:	c3                   	ret    
 
-0000c520 <memcpy>:
+0000c51f <memcpy>:
+ #ljmp  $(3*8), $0x0000
  #ljmp  $(1*8), $main
 
 
 memcpy:
   movl  (%esi),%eax
-    c520:	8b 06                	mov    (%esi),%eax
+    c51f:	8b 06                	mov    (%esi),%eax
   addl  $4    ,%esi
-    c522:	83 c6 04             	add    $0x4,%esi
+    c521:	83 c6 04             	add    $0x4,%esi
   movl  %eax ,(%edi)
-    c525:	89 07                	mov    %eax,(%edi)
+    c524:	89 07                	mov    %eax,(%edi)
   addl   $4    ,%edi
-    c527:	83 c7 04             	add    $0x4,%edi
+    c526:	83 c7 04             	add    $0x4,%edi
   subl   $1    ,%ecx
-    c52a:	83 e9 01             	sub    $0x1,%ecx
+    c529:	83 e9 01             	sub    $0x1,%ecx
   jnz    memcpy
-    c52d:	75 f1                	jne    c520 <memcpy>
+    c52c:	75 f1                	jne    c51f <memcpy>
   ret
-    c52f:	c3                   	ret    
+    c52e:	c3                   	ret    
+    c52f:	90                   	nop
 
 0000c530 <gdt>:
 	...
@@ -305,7 +305,7 @@ Disassembly of section .stab:
    0:	01 00                	add    %eax,(%eax)
    2:	00 00                	add    %al,(%eax)
    4:	00 00                	add    %al,(%eax)
-   6:	52                   	push   %edx
+   6:	53                   	push   %ebx
    7:	00 19                	add    %bl,(%ecx)
    9:	00 00                	add    %al,(%eax)
    b:	00 01                	add    %al,(%ecx)
@@ -667,38 +667,40 @@ Disassembly of section .stab:
  37f:	00 14 c5 00 00 00 00 	add    %dl,0x0(,%eax,8)
  386:	00 00                	add    %al,(%eax)
  388:	44                   	inc    %esp
- 389:	00 b2 00 19 c5 00    	add    %dh,0xc51900(%edx)
- 38f:	00 00                	add    %al,(%eax)
- 391:	00 00                	add    %al,(%eax)
- 393:	00 44 00 b7          	add    %al,-0x49(%eax,%eax,1)
- 397:	00 20                	add    %ah,(%eax)
- 399:	c5 00                	lds    (%eax),%eax
+ 389:	00 a4 00 19 c5 00 00 	add    %ah,0xc519(%eax,%eax,1)
+ 390:	00 00                	add    %al,(%eax)
+ 392:	00 00                	add    %al,(%eax)
+ 394:	44                   	inc    %esp
+ 395:	00 a5 00 1e c5 00    	add    %ah,0xc51e00(%ebp)
  39b:	00 00                	add    %al,(%eax)
  39d:	00 00                	add    %al,(%eax)
- 39f:	00 44 00 b8          	add    %al,-0x48(%eax,%eax,1)
- 3a3:	00 22                	add    %ah,(%edx)
+ 39f:	00 44 00 ab          	add    %al,-0x55(%eax,%eax,1)
+ 3a3:	00 1f                	add    %bl,(%edi)
  3a5:	c5 00                	lds    (%eax),%eax
  3a7:	00 00                	add    %al,(%eax)
  3a9:	00 00                	add    %al,(%eax)
- 3ab:	00 44 00 b9          	add    %al,-0x47(%eax,%eax,1)
- 3af:	00 25 c5 00 00 00    	add    %ah,0xc5
+ 3ab:	00 44 00 ac          	add    %al,-0x54(%eax,%eax,1)
+ 3af:	00 21                	add    %ah,(%ecx)
+ 3b1:	c5 00                	lds    (%eax),%eax
+ 3b3:	00 00                	add    %al,(%eax)
  3b5:	00 00                	add    %al,(%eax)
- 3b7:	00 44 00 ba          	add    %al,-0x46(%eax,%eax,1)
- 3bb:	00 27                	add    %ah,(%edi)
- 3bd:	c5 00                	lds    (%eax),%eax
- 3bf:	00 00                	add    %al,(%eax)
- 3c1:	00 00                	add    %al,(%eax)
- 3c3:	00 44 00 bb          	add    %al,-0x45(%eax,%eax,1)
- 3c7:	00 2a                	add    %ch,(%edx)
- 3c9:	c5 00                	lds    (%eax),%eax
+ 3b7:	00 44 00 ad          	add    %al,-0x53(%eax,%eax,1)
+ 3bb:	00 24 c5 00 00 00 00 	add    %ah,0x0(,%eax,8)
+ 3c2:	00 00                	add    %al,(%eax)
+ 3c4:	44                   	inc    %esp
+ 3c5:	00 ae 00 26 c5 00    	add    %ch,0xc52600(%esi)
  3cb:	00 00                	add    %al,(%eax)
  3cd:	00 00                	add    %al,(%eax)
- 3cf:	00 44 00 bc          	add    %al,-0x44(%eax,%eax,1)
- 3d3:	00 2d c5 00 00 00    	add    %ch,0xc5
+ 3cf:	00 44 00 af          	add    %al,-0x51(%eax,%eax,1)
+ 3d3:	00 29                	add    %ch,(%ecx)
+ 3d5:	c5 00                	lds    (%eax),%eax
+ 3d7:	00 00                	add    %al,(%eax)
  3d9:	00 00                	add    %al,(%eax)
- 3db:	00 44 00 bd          	add    %al,-0x43(%eax,%eax,1)
- 3df:	00 2f                	add    %ch,(%edi)
- 3e1:	c5 00                	lds    (%eax),%eax
+ 3db:	00 44 00 b0          	add    %al,-0x50(%eax,%eax,1)
+ 3df:	00 2c c5 00 00 00 00 	add    %ch,0x0(,%eax,8)
+ 3e6:	00 00                	add    %al,(%eax)
+ 3e8:	44                   	inc    %esp
+ 3e9:	00 b1 00 2e c5 00    	add    %dh,0xc52e00(%ecx)
 	...
 
 Disassembly of section .stabstr:
@@ -707,11 +709,11 @@ Disassembly of section .stabstr:
    0:	00 2f                	add    %ch,(%edi)
    2:	74 6d                	je     71 <CR0_PE_ON+0x70>
    4:	70 2f                	jo     35 <CR0_PE_ON+0x34>
-   6:	63 63 52             	arpl   %sp,0x52(%ebx)
-   9:	4d                   	dec    %ebp
-   a:	34 48                	xor    $0x48,%al
-   c:	75 45                	jne    53 <CR0_PE_ON+0x52>
-   e:	2e 73 00             	jae,pn 11 <CR0_PE_ON+0x10>
+   6:	63 63 4e             	arpl   %sp,0x4e(%ebx)
+   9:	73 6e                	jae    79 <CR0_PE_ON+0x78>
+   b:	66 55                	push   %bp
+   d:	74 2e                	je     3d <CR0_PE_ON+0x3c>
+   f:	73 00                	jae    11 <CR0_PE_ON+0x10>
   11:	65 6e                	outsb  %gs:(%esi),(%dx)
   13:	74 72                	je     87 <CR0_PE_ON+0x86>
   15:	79 2e                	jns    45 <CR0_PE_ON+0x44>

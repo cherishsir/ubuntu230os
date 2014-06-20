@@ -33,5 +33,3 @@ clean:
 	-rm -f $(obj) $(elf) $(boot) $(asm) kernel.out
 	cd kernel ;make clean; cd ../
 
-umount:
-	sudo umount /dev/sdb

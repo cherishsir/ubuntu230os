@@ -1,6 +1,5 @@
 #ifndef _TIMER_H_
 #define _TIMER_H_
-#include<header.h>
 #define MAX_TIMER 500
 #define ALLOC   1
 #define RUNNING  2
@@ -17,6 +16,11 @@ typedef struct{
  unsigned number;
  TIMER timer[MAX_TIMER];
 }TIMERCTL;
-extern TIMERCTL timerctl;
 
+extern void init_pit(TIMERCTL *timerctl);
+extern void inthandler20(int* esp);
+extern TIMER * timer_alloc(TIMERCTL * timerctl,unsigned i);
+extern void timer_init(TIMER *timer,struct FIFO8 *fifo,unsigned char data);
+extern void timer_free(TIMER *timer);
+extern void timer_settime(TIMER *timer,unsigned timeout,TIMERCTL * timerctl);
 #endif

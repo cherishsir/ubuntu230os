@@ -37,11 +37,15 @@
 		<Unit filename="../../os/kernel/idtgdt.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../os/kernel/include/fifo.h" />
 		<Unit filename="../../os/kernel/include/font.h" />
 		<Unit filename="../../os/kernel/include/fontascii.h" />
 		<Unit filename="../../os/kernel/include/header.h" />
+		<Unit filename="../../os/kernel/include/idtgdt.h" />
+		<Unit filename="../../os/kernel/include/int.h" />
 		<Unit filename="../../os/kernel/include/mm.h" />
 		<Unit filename="../../os/kernel/include/mmu.h" />
+		<Unit filename="../../os/kernel/include/screen.h" />
 		<Unit filename="../../os/kernel/include/timer.h" />
 		<Unit filename="../../os/kernel/include/types.h" />
 		<Unit filename="../../os/kernel/include/x86.h" />
@@ -54,12 +58,6 @@
 		</Unit>
 		<Unit filename="../../os/kernel/makefile" />
 		<Unit filename="../../os/kernel/mm.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../os/kernel/mouse.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="../../os/kernel/print.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../os/kernel/screen.c">

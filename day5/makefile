@@ -34,3 +34,6 @@ clean:
 
 umount:
 	sudo umount /dev/sdb
+
+done:
+	make clean && make && make fat12 && make run

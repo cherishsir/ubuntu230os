@@ -58,7 +58,7 @@ outb(PIC1_IMR, 0xef);//1110 1111  irq 12打开　mouse是irq 12  所以要把pic
 
 //打印出int0x21处的idt值，主要看offset是否与　asm_inthandler21一样（看反汇编，可以看到地址）
 fpt cls=clear_screen;
-(*cls)(5);
+(*cls)(3);
 int * addr=(int *)(0x0026f800+8*0x21);
 printdebug(*(addr),0);
 printdebug(*(addr+1),160);

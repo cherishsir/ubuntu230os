@@ -1,6 +1,7 @@
 #include<head.h>
 #include<x86.h>
 
+typedef void (* fpt)(char color);
 void bootmain()
 {
  init_palette();
@@ -9,6 +10,8 @@ clear_screen(15);
 draw_window();
 bootinfo *btinfo=(bootinfo *)0xff0;
 init_screen(btinfo);
+
+//while(1);
 
 
 putchar('a',7,30,40);
@@ -25,11 +28,14 @@ clear_screen(3  );
  sprintf(str,"xsize=%d,ysize=%d",a,b);
  puts(str,8,10,130);
  char mouse[16*16];
+
+init_gdtidt();
 init_mouse(mouse,7);
 display_mouse((char*)0xa0000,320,16,16,160,100,mouse,16);
-init_gdtidt();
+fpt cls=clear_screen;
+(*cls)(3);
+//display_mouse((char*)0xa0000,320,16,16,160,100,mouse,16);
 
-//lidt((void *)0xff1);
 
 
   while(1);

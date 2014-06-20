@@ -253,7 +253,6 @@ void sheet_setbuf(SHEET * sht,unsigned char *buf,int xsize,int ysize,int col_inv
   return ;
 }
 
-
 void sheet_updown(SHEET * sht,int height)
 {
  int h ,old=sht->height;

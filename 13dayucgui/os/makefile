@@ -35,7 +35,7 @@ lib:
 	cd ./kernel;make lib;
 
 clean:
-	-rm *.img
+	-rm *.img *.out *.o *.elf *.asm
 	cd ./kernel;make clean;cd ../
 cleanall:clean
 	cd ./kernel/ucgui;make clean

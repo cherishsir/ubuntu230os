@@ -199,14 +199,14 @@ gdt:
   .word 0x0000,0x0000,0x0000,0x0000  #need a flag
   .word 0xffff,0x0000,0x9200,0x00cf  #data selector 1
   .word 0xffff,0x0000,0x9a00,0x00c7  #entry code    2
-  .word 0xffff,0x0000,0x9a28,0x00c7  #c code        3
+ # .word 0xffff,0x0000,0x9a28,0x00c7  #c code        3
   .word 0x00                         # 0x479a vip
 
 
 
 
 gdtdesc:
-  .word   31         #4*8-1                 # sizeof(gdt) - 1   2字节的大小
+  .word   23         #3*8-1                 # sizeof(gdt) - 1   2字节的大小
   .long   gdt                               # address gdt       4字节的大小
 main:
 #spin:

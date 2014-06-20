@@ -6,7 +6,7 @@ below value=11932
 #include<x86.h>
 #include<timer.h>
 
-extern TIMERCTL *gtimerctl;
+TIMERCTL *gtimerctl;
 void init_pit(TIMERCTL *timerctl)
 {
 
@@ -93,25 +93,5 @@ void timer_settime(TIMER *timer,unsigned timeout,TIMERCTL * timerctl)
     timer->flag=RUNNING;
     return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

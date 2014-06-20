@@ -33,3 +33,5 @@ clean:
 	-rm -f $(obj) $(elf) $(boot) $(asm) kernel.out
 	cd kernel ;make clean; cd ../
 
+done:
+	make clean && make && make fat12 && make run

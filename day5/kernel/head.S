@@ -128,7 +128,10 @@ protcseg:
   movl $(512*1024/4),%ecx
   call memcpy
 
-  ljmp  $(3*8), $0x0000  //jmp to 0x280000:0x0000 0000
+//用下面这个种方法居然可以了，哈哈。
+  pushl $0x280000
+  ret
+ // ljmp  $(2*8), $main  //jmp to 0x280000:0x0000 0000
   jmp .
 
 
@@ -148,11 +151,11 @@ gdt:
   .word 0xffff,0x0000,0x9a00,0x0047     #entry code    2
   .word 0xffff,0x0000,0x9a28,0x0047     #c code        3
   .word 0x00                            #no use
-
 gdtdesc:
-  .word   31          #4*8-1                 # sizeof(gdt) - 1
+  .word   39         #5*8-1                 # sizeof(gdt) - 1
   .long   gdt                                # address gdt
 main:
+
 
 
 

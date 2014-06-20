@@ -58,10 +58,10 @@ void  init_gdtidt()
   
   for(i=0;i<256;i++)
   {
-      setidt(idt+i,(int)asm_inthandler21,3*8,0x008e);//用printdebug显示之后，证明这一部分是写进去了
+      setidt(idt+i,(int)asm_inthandler21,2*8,0x008e);//用printdebug显示之后，证明这一部分是写进去了
     
   }
-  setidt(idt+0x21,(int)asm_inthandler21-0x280000,3*8,0x008e);//用printdebug显示之后，证明这一部分是写进去了
+  setidt(idt+0x21,(int)asm_inthandler21,2*8,0x008e);//用printdebug显示之后，证明这一部分是写进去了
 
   load_idtr(0x7ff,0x0026f800);//this is right
 

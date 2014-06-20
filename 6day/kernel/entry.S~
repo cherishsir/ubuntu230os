@@ -163,7 +163,7 @@ all:
   
  pushl $0x280000
  ret
- #ljmp  $(3*8), $0x0000
+ ljmp  $(3*8), $0x0000
  #ljmp  $(1*8), $main
 
 

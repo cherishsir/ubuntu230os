@@ -3,9 +3,6 @@
 关于刷新图层加速的部分没有实现，感觉没有太大的必要去理解学习这一部分，不是重点
  **********************************************************************/
 #include<header.h>
-#include<fontascii.h>
-#include<GUIType.h>
-#include<GUI.h>
 
 //需要用到的函数，halt,cli,out8,read_eflags,write_eflags,这些函数在x86.h中
 //init _palette, set_palette 这两个函数我想放在screen.c中
@@ -13,8 +10,8 @@
 #define black 0
 #define red   1
 #define green 2
-extern  GUI_CONTEXT        GUI_Context;
-TIMERCTL *gtimerctl;//global gtimerctl
+
+
 
 void bootmain(void)
 {
@@ -41,12 +38,13 @@ unsigned char data;		        //temp variable to get fifo data
 int count=0;
 fifo8_init(&keyfifo ,32,keybuf);//keyfifo是一个global data defined in int.c
 fifo8_init(&mousefifo,128,mousebuf);
+
+//初始化　鼠标按键控制电路
+init_keyboard();
 //enable timer ,keyboard and mouse   //1111 1000 后面的三个0代表 accept interrupt request, irq0=timer interrupt
 outb(PIC0_IMR, 0xf8);//1111 1000  irq 1 2打开 因为keyboard是irq 1,irq2 enable 8259B 芯片发生的中断请求                                 // enable pic slave and keyboard interrupt
 //enable mouse interrupt 1110 1111  irq 12 打开　mouse是irq 12  所以要把pic 1 pic 2的芯片中断响应位打开。
 outb(PIC1_IMR, 0xef);
-//初始化　鼠标按键控制电路
-init_keyboard();
 
 
 unsigned int memtotal;
@@ -61,7 +59,7 @@ memman_free(memman,0x400000,memtotal-0x400000);
 char *desktop=(char*)memman_alloc(memman,320*200);
 char *mousepic=(char*)memman_alloc(memman,16*16);
 //char mousepic[16*16];
-init_mouse(mousepic,99);	//99　means background color
+init_mouse_pic(mousepic,99);	//99　means background color
 //display_mouse(bootp->vram,bootp->xsize,16,16,mx,my,mousepic,16);
 //printdebug(desktop,0);
 //while(1);
@@ -111,7 +109,7 @@ sheet_setbuf(sht_win,win_buf,160,65,-1);
 mx=200;my=100;//set mouse initial position
 sheet_move(sht_back,0,0);
 sheet_move(sht_mouse,mx,my);
-sheet_move(sht_win,80,72);
+sheet_move(sht_win,180,72);
 
 //set sht_back to layer0 ;set sht_mouse to layer1
 sheet_updown(sht_back,0);
@@ -125,8 +123,6 @@ enable_mouse(&mdec);   //这里会产生一个mouse interrupt
 //draw_win_buf(desktop);
 
 GUI_Init();
-
-
 GUI_SetBkColorIndex(2);
 GUI_SetColorIndex(2);
 GUI_SetTextStyle(GUI_TS_NORMAL);//GUI_TS_NORMAL GUI_TS_UNDERLINE GUI_TS_STRIKETHRU
@@ -151,6 +147,11 @@ GUI_SetFont(&GUI_Font8x8);
   GUI_Context.DispPosX = 200;
   GUI_Context.DispPosY = 30;
   GUI_DispString("hello world");
+  GUI_SetColorIndex(4);
+  GUI_SetPenSize(3);
+  GUI_DrawEllipse(100,100,25,50);
+   GUI_DrawEllipse(100,100,50,25);
+
   /*
 */
 sheet_refresh(sht_back,0,0,bootp->xsize,bootp->ysize);
@@ -178,6 +179,8 @@ while(1)
       if(fifo8_status(&keyfifo) != 0)
       {
         data=fifo8_read(&keyfifo);
+        sprintf(s,"%d ",data);
+        wrtrfrsh(sht_back,100,0,7,0,s,7);
         sti();
       }//end of keyboard decoder
       else if(fifo8_status(&mousefifo) != 0)//we have mouse interrupt data to process
@@ -267,9 +270,6 @@ while(1)
 
  }
 }
-
-
-
 
 
 

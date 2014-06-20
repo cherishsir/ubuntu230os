@@ -2,16 +2,18 @@
 #then cat "ckernel" file  >> "head" ,last mv  "head"  "kernel"
 OBJCOPY	:= $(GCCPREFIX)objcopy
 OBJDUMP	:= $(GCCPREFIX)objdump
-include=-I./include -I./ucgui/GUI/Core/ -I./ucgui/Config
+include=-I./include -I./ucgui/GUI/Core/ -I./ucgui/Config -I/usr/include/ -I/usr/include/i386-linux-gnu/
 entry_objs= entry.o
-ccode_objs=main.o screen.o timer.o font.o print.o idtgdt.o int.o asmint32.o fifo.o mouse.o mm.o
-CFLAGS := $(CFLAGS) -O1 -fno-builtin $(include) -MD
+ccode_objs=main.o screen.o timer.o font.o  idtgdt.o int.o asmint32.o fifo.o  mm.o
+CFLAGS := $(CFLAGS) -O1  $(include) -MD
 CFLAGS += -fno-omit-frame-pointer -w
 CFLAGS += -Wall -Wno-format -Wno-unused  -gstabs -m32  -fno-stack-protector
 LDFLAGS = -m elf_i386
 addr=0xc400
+LIB= -lucgui -lm -L./ -L/usr/lib/i386-linux-gnu/ -L/usr/lib/i386-linux-gnu/
 
-#this will make c source compiled  to  object file
+#this format LIB=/usr/lib/i386-linux-gnu/libc.a /usr/lib/i386-linux-gnu/libm.a libucgui.a
+#this will make   source compiled  to  object file
 %.o:%.c
 	$(CC) -nostdinc $(CFLAGS) -Os -c -o $@ $<
 
@@ -43,10 +45,7 @@ head:
 #generate ckernel
 ckernel:
 	@echo "addr=0x280000"
-	$(LD)  $(LDFLAGS) -N -e bootmain -T kernel.ld -o $@.out $^ libucgui.a \
-	/usr/lib/i386-linux-gnu/libm.a
-
-#/lib/i386-linux-gnu/libgcc_s.so.1
+	$(LD)  $(LDFLAGS) -N -e bootmain -T kernel.ld -o $@.out $^ $(LIB)
 	$(OBJDUMP)  -S -D $@.out >$@.asm
 	$(OBJCOPY)  -S -O binary  $@.out $@
 

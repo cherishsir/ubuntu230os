@@ -9,9 +9,10 @@ SECTIONS
 {
 	/* Link the kernel at this address: "." means the current address */
 	. = 0x280000;
-	.text :  {
+.text :  {
 		*(.text)
 	}
+
 	.rodata : {
 		*(.rodata)
 	}
@@ -23,6 +24,7 @@ SECTIONS
 	.bss : {
 		*(.bss)
 	}
+
 
 
 }
