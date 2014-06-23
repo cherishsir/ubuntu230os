@@ -38,6 +38,13 @@ struct boot_info
 
   char *vram;
 };
+struct Cursor
+{
+ unsigned cx;
+ unsigned cy;
+ unsigned cwidth;
+ unsigned cheight;
+};
 
 
 

@@ -73,7 +73,7 @@ timer_settime(timer,1000,timerctl);
 timer_settime(timer2,300,timerctl);
 timer_settime(timer3,50,timerctl);
 
-make_window8(win_buf,160,68,"timer");
+make_window8(win_buf,160,68,"window");
 //显示内存使用情况
 
 
@@ -151,13 +151,18 @@ sheet_refresh(sht_back,400,90,gboot->xsize,100+16);
 sprintf(s,"memory:%dMB,free:%dMB,%d",memtotal>>20,memman_avail(memman)>>20,memman->cellnum);
 wrtrfrsh(sht_back,0,400,WHITE,BLACK,s,30);
 
-wrtrfrsh16(sht_back,0,424,WHITE,BLACK,s,30);
+wrtrfrsh16(sht_back,0,424,WHITE,BLACK,s,27);
 unsigned count=0;
+struct Cursor cursor;
+cursor.cx=12;
+cursor.cy=44;
+cursor.cheight=16;
+cursor.cwidth=8;
 while(1)
  {
    count++;
     sprintf(s,"%d ",timerctl->count);
-    wrtrfrsh(sht_win,20,28,BLACK,WHITE,s,7);
+    wrtrfrsh(sht_win,18,24,BLACK,WHITE,s,7);
 
    sti();
    if(fifo32_status(&fifo)== 0)//no data in fifo
@@ -171,8 +176,27 @@ while(1)
      sti();
      if(data>=256 && data<=511) //keyboard data
      {
-        sprintf(s,"%d ",data-256);
+        sprintf(s,"%x ",data-256);
         wrtrfrsh(sht_back,100,0,7,0,s,7);//按下松手都会产生中断
+        //判断data是否在可显示的范围内
+        if(data<256+0x54&& cursor.cx<140)
+        {
+            if(keytable[data-256]!=0)
+            {
+              s[0]=keytable[data-256];
+              s[1]=0;
+              wrtrfrsh(sht_win,cursor.cx,cursor.cy,BLACK,WHITE,s,2);//做一个键位对应的数组？？
+              cursor.cx+=8;
+
+            }
+
+        }
+        if(data==256+0x0e && cursor.cx>19)
+        {
+         wrtrfrsh(sht_win,cursor.cx,cursor.cy,WHITE,WHITE,"  ",2);//做一个键位对应的数组？？
+         cursor.cx-=8;
+        }
+
      }
      else if(data>=512 && data<=512+255)//mouse data
      {
@@ -223,17 +247,20 @@ while(1)
              if(data!=0)
              {
                     timer_init(timer3,&fifo,0);//write data
-                    boxfill8(desktop,bootp->xsize,7,8,96,15,111);
+                    boxfill8(sht_win->buf,sht_win->bxsize,7,cursor.cx,cursor.cy,cursor.cx+cursor.cwidth,cursor.cy+cursor.cheight);
+
+
              }
              else
              {
 
                     timer_init(timer3,&fifo,1);//50ms
-                    boxfill8(desktop,bootp->xsize,0,8,96,15,111);
+                    boxfill8(sht_win->buf,sht_win->bxsize,0,cursor.cx,cursor.cy,cursor.cx+cursor.cwidth,cursor.cy+cursor.cheight);
+
 
              }
-                //timer_settime(timer3,50,timerctl);
-                sheet_refresh(sht_back,8,96,15,111);
+                timer_settime(timer3,50,timerctl);
+                sheet_refresh(sht_win,cursor.cx,cursor.cy,cursor.cx+cursor.cwidth,cursor.cy+cursor.cheight);
                 sheet_refresh(sht_back,250,100,320,108);
      }
 

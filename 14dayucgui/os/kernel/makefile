@@ -4,7 +4,8 @@ OBJCOPY	:= $(GCCPREFIX)objcopy
 OBJDUMP	:= $(GCCPREFIX)objdump
 include=-I./include -I./ucgui/GUI/Core/ -I./ucgui/Config -I/usr/include/ -I/usr/include/i386-linux-gnu/
 entry_objs= entry.o
-ccode_objs=main.o screen.o timer.o font.o  idtgdt.o int.o asmint32.o fifo.o  mm.o
+ccode_objs=main.o screen.o timer.o font.o  idtgdt.o int.o asmint32.o fifo.o  mm.o \
+game.o
 CFLAGS := $(CFLAGS) -O1  $(include) -MD
 CFLAGS += -fno-omit-frame-pointer -w
 CFLAGS += -Wall -Wno-format -Wno-unused  -gstabs -m32  -fno-stack-protector

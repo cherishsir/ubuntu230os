@@ -1,7 +1,16 @@
 #include<mm.h>
 #include<screen.h>
 #include<font.h>
+ char keytable[0x54] = {
+		0,   0,   '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '^', 0,   0,
+		'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '@', '[', 0,   0,   'A', 'S',
+		'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', ':', 0,   0,   ']', 'Z', 'X', 'C', 'V',
+		'B', 'N', 'M', ',', '.', '/', 0,   '*', 0,   ' ', 0,   0,   0,   0,   0,   0,
+		0,   0,   0,   0,   0,   0,   0,   '7', '8', '9', '-', '4', '5', '6', '+', '1',
+		'2', '3', '0', '.'
+	};
 struct boot_info *gboot;
+
 void clear_screen(char color) //15:pure white
 {
   int i;
@@ -256,7 +265,9 @@ static char closebtn[14][16] = {
 	boxfill8(buf, xsize, 12, 3,         3,         xsize - 4, 20       );
 	boxfill8(buf, xsize, 15, 1,         ysize - 2, xsize - 2, ysize - 2);
 	boxfill8(buf, xsize, 0, 0,         ysize - 1, xsize - 1, ysize - 1);
+	boxfill8(buf, xsize, 7, 8,         ysize - 26, xsize - 8, ysize - 8);
 
+	boxfill8(buf, xsize, DGRAY, 8,     ysize - 28, xsize - 8, ysize - 26);
 
  puts8(buf,xsize,24,4,7,title);
  //write the x button to the buf
@@ -282,9 +293,9 @@ static char closebtn[14][16] = {
 
 void wrtrfrsh(SHEET * sht,int x,int y,unsigned char fontcolor,unsigned backcolor,char *s,int length)
 {
-  boxfill8(sht->buf,sht->bxsize,backcolor, x,y,x+length*8-1,y+15);
+  boxfill8(sht->buf,sht->bxsize,backcolor, x,y,x+length*8-1,y+15+1);
   puts8(sht->buf ,sht->bxsize,x,y,fontcolor,s);
-  sheet_refresh(sht,x,y,x+length*8-1,y+15);
+  sheet_refresh(sht,x,y,x+length*8-1,y+15+1);
 }
 
 void wrtrfrsh16(SHEET * sht,int x,int y,unsigned char fontcolor,unsigned backcolor,char *s,int length)

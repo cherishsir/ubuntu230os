@@ -31,12 +31,16 @@
 		<Unit filename="../../os/kernel/fifo.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../os/kernel/game.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../os/kernel/idtgdt.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../os/kernel/include/fifo.h" />
 		<Unit filename="../../os/kernel/include/font.h" />
 		<Unit filename="../../os/kernel/include/fontascii.h" />
+		<Unit filename="../../os/kernel/include/game.h" />
 		<Unit filename="../../os/kernel/include/header.h" />
 		<Unit filename="../../os/kernel/include/idtgdt.h" />
 		<Unit filename="../../os/kernel/include/int.h" />
