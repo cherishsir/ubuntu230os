@@ -6,5 +6,5 @@
 
 
 ![ucgui](https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/hp.jpg)
-![ucgui](https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/13dayucgui/hpg4.jpg)
+![ucgui](https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/key.png)
 
