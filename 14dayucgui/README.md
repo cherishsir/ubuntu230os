@@ -9,7 +9,7 @@
 <tr>
 
 <td>
-<img src="ttps://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/hp.jpg">
+<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/hp.jpg">
 </td>
 
 <td>
