@@ -11,12 +11,12 @@
 <td>
 <img src="ttps://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/hp.jpg">
 </td>
-<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/key.png">
-<td>
 
+<td>
+<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/key.png">
 </td>
 
 
-<tr>
+</tr>
 
 </table>
