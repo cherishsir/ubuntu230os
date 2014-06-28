@@ -5,6 +5,18 @@
 - 下面是手機拍照像素不高
 
 
-![ucgui](https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/hp.jpg)
-![ucgui](https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/key.png)
+<table>
+<tr>
 
+<td>
+<img src="ttps://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/hp.jpg">
+</td>
+<img src="https://raw.githubusercontent.com/cherishsir/ubuntu230os/master/14dayucgui/key.png">
+<td>
+
+</td>
+
+
+<tr>
+
+</table>
