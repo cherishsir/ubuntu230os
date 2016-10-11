@@ -5,7 +5,9 @@
 
 使用方法
 make
+
 make fat12
+
 make writeusb
 
 
