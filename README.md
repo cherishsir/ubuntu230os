@@ -30,4 +30,3 @@ boot from USB (高分辨率)
 </th>
 </tr>
 </table>
-https://s3-ap-southeast-1.amazonaws.com/google.cn/index.html
