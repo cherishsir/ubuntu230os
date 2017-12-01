@@ -1,5 +1,5 @@
-##`操作系统的学习开发环境是在ubuntu下进行的`
-###所有代码均在HP g4的笔记本上u盘启动验证过
+## `操作系统的学习开发环境是在ubuntu下进行的`
+### 所有代码均在HP g4的笔记本上u盘启动验证过
 
 <table>
 <tr>
@@ -30,4 +30,4 @@ boot from USB (高分辨率)
 </th>
 </tr>
 </table>
-https://s3-ap-southeast-1.amazonaws.com/google.cn/index.html
+
